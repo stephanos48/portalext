@@ -24,7 +24,7 @@ namespace API.Controllers
             _messageRepository = messageRepository;
             _userRepository = userRepository;
         }
-
+        /*
         [HttpPost]
         public async Task<ActionResult<MessageDto>> CreateMessage(CreateMessageDto createMessageDto)
         {
@@ -53,7 +53,7 @@ namespace API.Controllers
 
             return BadRequest("Failed to send message");
 
-        }
+        }*/
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesForUser([FromQuery] 
