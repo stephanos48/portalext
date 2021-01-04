@@ -11,11 +11,12 @@ import { PresenceService } from './presence.service';
   providedIn: 'root'
 })
 export class AccountService {
-baseUrl = environment.apiUrl;
-private currentUserSource = new ReplaySubject<User>(1);
-currentUser$ = this.currentUserSource.asObservable();
+  baseUrl = environment.apiUrl;
+  private currentUserSource = new ReplaySubject<User>(1);
+  currentUser$ = this.currentUserSource.asObservable();
+  token: string;
 
-constructor(private http: HttpClient, private presence: PresenceService) { }
+  constructor(private http: HttpClient, private presence: PresenceService) { }
 
   login(model: any) {
     return this.http.post(this.baseUrl + 'account/login', model).pipe(
@@ -55,7 +56,7 @@ constructor(private http: HttpClient, private presence: PresenceService) { }
     this.presence.stopHubConnection();
   }
 
-  getDecodedToken(token) {
+  getDecodedToken(token:string) {
     return JSON.parse(atob(token.split('.')[1]));
   }
 

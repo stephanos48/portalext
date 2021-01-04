@@ -40,10 +40,18 @@ namespace API
             services.AddApplicationServices(_config);
             services.AddControllers();
             services.AddCors();
+            /*services.AddCors(options => 
+            {
+            options.AddPolicy("CorsPolicy", builder=> builder.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) => true));
+            });*/
+        
             services.AddIdentityServices(_config);
             services.AddSignalR();
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -59,21 +67,24 @@ namespace API
 
             app.UseRouting();
 
-            //app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
             app.UseCors(x => x.AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
                 .WithOrigins("https://localhost:4200"));
 
-            app.UseAuthentication();
-            
+            //app.UseCors("CorsPolicy");
+            app.UseAuthentication(); 
             app.UseAuthorization();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<PresenceHub>("hubs/presence");
                 endpoints.MapHub<MessageHub>("hubs/message");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
